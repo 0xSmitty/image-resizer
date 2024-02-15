@@ -9,6 +9,7 @@
             font-family: Arial, sans-serif;
             text-align: center;
             padding: 20px;
+            transition: background-color 0.3s ease;
         }
 
         #image-container {
@@ -41,10 +42,31 @@
             cursor: pointer;
             margin-top: 20px;
         }
+
+        #color-selector {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .color-box {
+            width: 30px;
+            height: 30px;
+            margin: 0 10px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
     <h1>Image Resizer</h1>
+    <div id="color-selector">
+        <div class="color-box" style="background-color: white;" onclick="changeBackgroundColor('white')"></div>
+        <div class="color-box" style="background-color: #ccc;" onclick="changeBackgroundColor('#ccc')"></div>
+        <div class="color-box" style="background-color: black;" onclick="changeBackgroundColor('black')"></div>
+    </div>
+
     <div id="upload-container" ondragover="handleDragOver(event)" ondrop="handleDrop(event)">
         <p>Drag and drop an image file here or click to select a file</p>
         <input type="file" accept="image/*" id="image-input" style="display: none;" />
@@ -115,6 +137,10 @@
             } else {
                 alert('Please select an image file.');
             }
+        }
+
+        function changeBackgroundColor(color) {
+            document.body.style.backgroundColor = color;
         }
     </script>
 </body>
