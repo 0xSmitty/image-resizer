@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Resizer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+
+        #image-container {
+            margin-top: 20px;
+            display: flex;
+            align-items: center; /* Align the centers of the images */
+        }
+
+        img {
+            margin: 10px;
+            border-radius: 50%;
+        }
+
+        .original-image {
+            width: 200px;
+            height: 200px;
+            margin: 10px; /* Adjusted margin */
+            display: flex; /* Add display flex */
+            justify-content: center; /* Center content horizontally */
+            align-items: center; /* Center content vertically */
+        }
+
+        .original-image img {
+            border-radius: 0; /* No border radius for the original image */
+        }
+
+        #upload-container {
+            border: 2px dashed #ccc;
+            padding: 20px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Image Resizer</h1>
+    <div id="upload-container" ondragover="handleDragOver(event)" ondrop="handleDrop(event)">
+        <p>Drag and drop an image file here or click to select a file</p>
+        <input type="file" accept="image/*" id="image-input" style="display: none;" />
+    </div>
+
+    <div id="image-container"></div>
+
+    <script>
+        function handleDragOver(event) {
+            event.preventDefault();
+            document.getElementById('upload-container').style.border = '2px dashed #aaa';
+        }
+
+        function handleDrop(event) {
+            event.preventDefault();
+            document.getElementById('upload-container').style.border = '2px dashed #ccc';
+
+            const file = event.dataTransfer.files[0];
+            handleFile(file);
+        }
+
+        document.getElementById('upload-container').addEventListener('click', function () {
+            document.getElementById('image-input').click();
+        });
+
+        document.getElementById('image-input').addEventListener('change', function () {
+            const file = this.files[0];
+            handleFile(file);
+        });
+
+        function handleFile(file) {
+            const container = document.getElementById('image-container');
+            container.innerHTML = ''; // Clear previous images
+
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const originalImg = new Image();
+                    originalImg.src = e.target.result;
+                    originalImg.width = 200;
+                    originalImg.height = 200;
+
+                    const originalImageDiv = document.createElement('div');
+                    originalImageDiv.classList.add('original-image');
+                    originalImageDiv.appendChild(originalImg);
+                    container.appendChild(originalImageDiv);
+
+                    const sizes = [
+                        { width: 133.5, height: 133.5 },
+                        { width: 64, height: 64 },
+                        { width: 40, height: 40 }
+                    ];
+
+                    sizes.forEach((size) => {
+                        const resizedImg = new Image();
+                        resizedImg.src = e.target.result;
+                        resizedImg.width = size.width;
+                        resizedImg.height = size.height;
+
+                        const imgDiv = document.createElement('div');
+                        imgDiv.appendChild(resizedImg);
+                        container.appendChild(imgDiv);
+                    });
+                };
+
+                reader.readAsDataURL(file);
+            } else {
+                alert('Please select an image file.');
+            }
+        }
+    </script>
+</body>
+</html>
